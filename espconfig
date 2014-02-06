@@ -10,6 +10,7 @@ for mod in mbarilib termios .; do
   [ -r $mod/Makefile ] && make -C $mod MINIRUBY=miniruby distclean
 done
 export CC CFLAGS CXXFLAGS
+ESP_PREFIX=${ESP_PREFIX-/opt/mbari}
 rm -f config.cache configure `find ext -name Makefile` && 
-autoconf && exec configure --prefix=/opt/mbari \
+autoconf && exec configure --prefix=${ESP_PREFIX} \
   --enable-mbari-api --enable-pthread --disable-ucontext $@

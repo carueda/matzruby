@@ -4,15 +4,16 @@
 #   coreOnly environment variable is set
 #
 make -j4 all || exit 3
-sudo make install DESTDIR=$DESTDIR || exit 1
-sudo chown $USER .installed.list || exit 2
+ESP_SUDO=${ESP_SUDO-sudo}
+$ESP_SUDO make install DESTDIR=$DESTDIR || exit 1
+$ESP_SUDO chown $USER .installed.list || exit 2
 [ -n "$coreOnly" ] || {
   echo "   Installing extensions required by MBARI ESP:"
   PATH=.:$PATH
-  sudo rm -f termios/*.log termios/*.so
+  $ESP_SUDO rm -f termios/*.log termios/*.so
   buildUtils clean all &&
   echo "Installing MBARI extensions..."  &&
-  sudo ruby inst-mbari.rb $DESTDIR &&
-  sudo ./buildUtils install &&
-  sudo chown $USER termios/*.log termios/*.so
+  $ESP_SUDO ruby inst-mbari.rb $DESTDIR &&
+  $ESP_SUDO ./buildUtils install &&
+  $ESP_SUDO chown $USER termios/*.log termios/*.so
 }
